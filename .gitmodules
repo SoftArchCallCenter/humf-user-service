@@ -1,0 +1,3 @@
+[submodule "HUMF_Proto"]
+	path = HUMF_Proto
+	url = https://github.com/SoftArchCallCenter/HUMF_Proto.git
