@@ -1,35 +1,30 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserList, User, UserServiceControllerMethods, UserId, Empty } from 'humf-proto/build/proto/user';
 
 @Controller()
+@UserServiceControllerMethods()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('createUser')
-  create(@Payload() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @MessagePattern('findAllUsers')
-  findAll() {
+  getAllUser(): UserList {
     return this.usersService.findAll();
   }
 
-  @MessagePattern('findOneUser')
-  findOne(@Payload() id: number) {
-    return this.usersService.findOne(id);
+  getUser(userId: UserId): User {
+    return this.usersService.findOne(userId.id);
   }
 
-  @MessagePattern('updateUser')
-  update(@Payload() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(updateUserDto.id, updateUserDto);
+  addUser(user: User): User {
+    return this.usersService.create(user);
   }
 
-  @MessagePattern('removeUser')
-  remove(@Payload() id: number) {
-    return this.usersService.remove(id);
+  updateUser(user: User): User {
+    return this.usersService.update(user.id, user);
+  }
+
+  deleteUser(userId: UserId): Empty {
+    return this.usersService.remove(userId.id);
   }
 }

@@ -12,7 +12,7 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         package: 'user',
-        protoPath: 'humf-proto/user.proto',
+        protoPath: 'humf-proto/proto/user.proto',
         url: process.env.GRPC_SERVER_URL,
       },
     }

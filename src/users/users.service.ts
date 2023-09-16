@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { User, UserId, UserList } from 'humf-proto/build/proto/user';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  create(user: User): User {
+    const newUser: User = {
+      id: '1',
+      username: 'john_doe',
+      password: 'hashed_password',
+      email: 'john@example.com',
+      photoUrl: 'https://example.com/john.jpg',
+    };
+    return newUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(): UserList{
+    const newUser: User = {
+      id: '1',
+      username: 'john_doe',
+      password: 'hashed_password',
+      email: 'john@example.com',
+      photoUrl: 'https://example.com/john.jpg',
+    };
+    const userList: UserList = { User: [newUser, newUser] }; // Wrap the user array in a UserList object
+    console.log(typeof(userList))
+    return userList;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string): User{
+    const newUser: User = {
+      id: '1',
+      username: 'john_doe',
+      password: 'hashed_password',
+      email: 'john@example.com',
+      photoUrl: 'https://example.com/john.jpg',
+    };
+    return newUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(userId: string, user: User): User{
+    const newUser: User = {
+      id: '1',
+      username: 'john_doe',
+      password: 'hashed_password',
+      email: 'john@example.com',
+      photoUrl: 'https://example.com/john.jpg',
+    };
+    return newUser;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(userId: string) {
+    return {};
   }
 }
