@@ -14,6 +14,12 @@ export class User {
     @Column()
     username: string;
 
+    @Column()
+    createAt: Date;
+
+    @Column()
+    updateAt: Date;
+
     constructor(user: Partial<User>) {
         Object.assign(this, user);
     }
