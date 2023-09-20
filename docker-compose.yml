@@ -11,5 +11,17 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  user-service:
+    build: ./
+    container_name: user-service
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/app
+    depends_on:
+      - mysql
+
 volumes:
   mysql_data:
