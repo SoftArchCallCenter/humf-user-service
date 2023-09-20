@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
-  imports: [ TypeOrmModule.forRoot({
+  imports: [UsersModule, TypeOrmModule.forRoot({
     type: 'mysql',
     host: process.env.MYSQL_HOST,
     port: parseInt(process.env.MYSQL_PORT),
@@ -22,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     synchronize: true,
   })
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
