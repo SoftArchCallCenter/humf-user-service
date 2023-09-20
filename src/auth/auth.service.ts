@@ -14,7 +14,7 @@ export class AuthService {
         private readonly entityManager: EntityManager,
     ) {}
 
-    async signup(userData: SignupUserDto): Promise<any> {
+    async signup(userData: SignupUserDto): Promise<User | undefined> {
 
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(userData.password, saltOrRounds);
