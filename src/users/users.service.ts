@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { 
+  Injectable,
+  NotFoundException,
+ } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {User} from "./entities/user.entity";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ImageService } from 'src/image/image.service';
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private UserRepository: Repository<User>,
+    private readonly imageService: ImageService,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -31,14 +37,29 @@ export class UsersService {
     return user
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    file: Express.Multer.File,
+    ): Promise<User> {
     const updateAt = new Date()
-    const updateUser = await this.UserRepository.update({ id },{ 
-      ...updateUserDto,
-      updateAt
-    })
-    // console.log(updateUser)
-    return this.UserRepository.findOneBy({ id })
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // if (updateUserDto.password) {
+    //   user.password = await hash(updateUserDto.password, 10);
+    // }
+
+    if (file) {
+      const profilePictureUrl = await this.imageService.uploadImageToS3(file);
+      user.profilePictureUrl = profilePictureUrl;
+    }
+
+    Object.assign(user, updateUserDto);
+
+    return this.UserRepository.save(user);
   }
 
   async remove(id: number) {
