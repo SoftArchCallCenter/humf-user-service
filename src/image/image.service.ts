@@ -21,6 +21,7 @@ export class ImageService {
       Key: fileKey,
       Body: file.buffer,
       ContentType: file.mimetype,
+      ACL: 'public-read',
     };
 
     await this.s3.upload(params).promise();
