@@ -20,6 +20,11 @@ export class User {
     @Column()
     updateAt: Date;
 
+    @Column({
+        default: 'https://sa-proj-restaurant.s3.amazonaws.com/defaultProfile.jpeg',
+      })
+    profilePictureUrl: string;
+
     constructor(user: Partial<User>) {
         Object.assign(this, user);
     }
