@@ -18,23 +18,20 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const currentDate = new Date()
     let newUser = this.UserRepository.create({
       ...createUserDto,
-      createAt: currentDate,
-      updateAt: currentDate,
-    }) 
-    return this.UserRepository.save(newUser)
+    });
+    return this.UserRepository.save(newUser);
   }
 
   async findAll() {
-    const users = await this.UserRepository.find()
+    const users = await this.UserRepository.find();
     return users;
   }
 
   async findOne(id: number) {
-    const user = await this.UserRepository.findOneBy({ id })
-    return user
+    const user = await this.UserRepository.findOneBy({ id });
+    return user;
   }
 
   async update(
@@ -42,15 +39,11 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     file: Express.Multer.File,
     ): Promise<User> {
-    const updateAt = new Date()
-    const user = await this.findOne(id);
+    
+    const user = await this.UserRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
-    // if (updateUserDto.password) {
-    //   user.password = await hash(updateUserDto.password, 10);
-    // }
 
     if (file) {
       const profilePictureUrl = await this.imageService.uploadImageToS3(file);

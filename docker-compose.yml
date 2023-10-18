@@ -3,16 +3,23 @@ version: '3.8'
 services:
   mysql:
     image: mysql
-    container_name: mysql
+    container_name: mysql-user-service
     env_file:
       - .env
     ports:
       - 3306:3306
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 60s
-      retries: 10
-    
+
+  user-service:
+    build: ./
+    container_name: user-service
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    depends_on:
+      - mysql
+
+  # Development
   myadmin:
     image: phpmyadmin/phpmyadmin
     container_name: myadmin
@@ -22,14 +29,3 @@ services:
       PMA_HOST: mysql
     depends_on:
       - mysql
-
-  # user-service:
-  #   build: ./
-  #   container_name: user-service
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     mysql:
-  #       condition: service_healthy
