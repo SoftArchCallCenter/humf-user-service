@@ -16,6 +16,9 @@ services:
       - ${USER_SERVICE_PORT}:${USER_SERVICE_PORT}
     depends_on:
       - mysql
+    volumes:
+      - ./src:/app/src
+    command: npm run start:dev
 
   # Development
   myadmin:
