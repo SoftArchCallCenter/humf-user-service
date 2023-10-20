@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
-import { SignupUserDto } from 'src/users/dto/signup-user.dto';
+import { LoginUserDto } from 'src/auth/dto/login-user.dto';
+import { SignupUserDto } from 'src/auth/dto/signup-user.dto';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 
@@ -14,7 +14,7 @@ export class AuthService {
         private readonly entityManager: EntityManager,
     ) {}
 
-    async signup(userData: SignupUserDto): Promise<User | undefined> {
+    async signup(userData: SignupUserDto): Promise<any> {
 
         const saltOrRounds = 10;
         const hashedPassword = await bcrypt.hash(userData.password, saltOrRounds);
@@ -30,7 +30,7 @@ export class AuthService {
         return user;
     }
 
-    async login(credentials: LoginUserDto): Promise<User | undefined> {
+    async login(credentials: LoginUserDto): Promise<any> {
         const { email, password } = credentials;
 
         const user = await this.usersRepository.findOne({ where: { email } });
