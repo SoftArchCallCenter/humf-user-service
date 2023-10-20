@@ -19,6 +19,9 @@ services:
     volumes:
       - ./src:/app/src
     command: npm run start:dev
+    networks:
+      - default
+      - humf-service-network
 
   # Development
   myadmin:
@@ -30,3 +33,7 @@ services:
       PMA_HOST: mysql
     depends_on:
       - mysql
+
+networks:
+  humf-service-network:
+    external: true
