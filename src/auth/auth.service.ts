@@ -14,10 +14,13 @@ export class AuthService {
         private readonly entityManager: EntityManager,
     ) {}
 
-    async signup(userData: SignupUserDto): Promise<any> {
-
+    private async hashPassword(password: string): Promise<string> {
         const saltOrRounds = 10;
-        const hashedPassword = await bcrypt.hash(userData.password, saltOrRounds);
+        return bcrypt.hash(password, saltOrRounds);
+    }
+    
+    async signup(userData: SignupUserDto): Promise<any> {
+        const hashedPassword = await this.hashPassword(userData.password);
         const newUser = {
             email: userData.email,
             password: hashedPassword,
