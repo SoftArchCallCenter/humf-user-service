@@ -7,9 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true}), 
-    UsersModule, 
-    AuthModule, 
+    ConfigModule.forRoot({ isGlobal: true }),
+    UsersModule,
+    AuthModule,
     DatabaseModule,
     ImageModule,
   ],
