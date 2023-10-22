@@ -4,6 +4,8 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { ImageModule } from './image/image.module';
 import { ConfigModule } from '@nestjs/config';
+import { AtGuard } from './common/gaurds';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -14,6 +16,11 @@ import { ConfigModule } from '@nestjs/config';
     ImageModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
+  ],
 })
 export class AppModule {}
