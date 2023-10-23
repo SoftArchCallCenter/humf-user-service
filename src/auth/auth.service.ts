@@ -12,8 +12,9 @@ import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { SignupUserDto } from 'src/auth/dto/signup-user.dto';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager, IsNull, Not, Repository } from 'typeorm';
-import { JwtPayload, Tokens } from './types';
+import { JwtPayload, Tokens } from '../common/types';
 import { JwtService } from '@nestjs/jwt';
+import { LogoutUserDto } from './dto/logout-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -82,7 +83,7 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(userId: number): Promise<boolean> {
+  async logout(userId: number): Promise<boolean> {    
     await this.usersRepository.update(
       {
         id: userId,
@@ -127,11 +128,11 @@ export class AuthService {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
         secret: this.config.get<string>('JWT_AT_SECRET'),
-        expiresIn: '15m',
+        expiresIn: this.config.get<string>('JWT_AT_EXPIRES_IN'),
       }),
       this.jwtService.signAsync(jwtPayload, {
         secret: this.config.get<string>('JWT_RT_SECRET'),
-        expiresIn: '7d',
+        expiresIn: this.config.get<string>('JWT_RT_EXPIRES_IN'),
       }),
     ]);
 
