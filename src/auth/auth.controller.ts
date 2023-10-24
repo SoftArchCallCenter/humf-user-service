@@ -6,14 +6,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { SignupUserDto } from 'src/auth/dto/signup-user.dto';
-import { Tokens } from '../common/types';
-import { RtGuard } from 'src/common/gaurds';
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators';
-import { LogoutUserDto } from './dto/logout-user.dto';
-
+import { RtGuard } from 'src/common/gaurds';
+import { Tokens } from '../common/types';
+import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
