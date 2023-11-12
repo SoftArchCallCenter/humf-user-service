@@ -3,6 +3,7 @@ import {
   NotFoundException,
  } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {User} from "./entities/user.entity";
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,6 +17,11 @@ export class UsersService {
     @InjectRepository(User) private UserRepository: Repository<User>,
     private readonly imageService: ImageService,
   ) {}
+
+  private async hashPassword(password: string): Promise<string> {
+    const saltOrRounds = 10;
+    return bcrypt.hash(password, saltOrRounds);
+  }
 
   create(createUserDto: CreateUserDto) {
     let newUser = this.UserRepository.create({
@@ -39,7 +45,6 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     file: Express.Multer.File,
     ): Promise<User> {
-    
     const user = await this.UserRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -49,7 +54,8 @@ export class UsersService {
       const profilePictureUrl = await this.imageService.uploadImageToS3(file);
       user.profilePictureUrl = profilePictureUrl;
     }
-
+    const hashedPassword = await this.hashPassword(updateUserDto.password);
+    updateUserDto.password = hashedPassword
     Object.assign(user, updateUserDto);
 
     return this.UserRepository.save(user);
