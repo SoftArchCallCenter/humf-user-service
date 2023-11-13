@@ -37,4 +37,4 @@ services:
 
 networks:
   humf-service-network:
-  #   external: true
+    external: true
