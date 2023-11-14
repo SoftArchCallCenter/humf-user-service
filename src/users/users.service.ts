@@ -63,7 +63,7 @@ export class UsersService {
       // console.log(url)
       user.profilePictureUrl = url
     }
-    // Object.assign(user, updateUserDto);
+    Object.assign(user, updateUserDto);
 
     return this.UserRepository.save(user);
   }
