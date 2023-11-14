@@ -49,14 +49,21 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
-    if (file) {
-      const profilePictureUrl = await this.imageService.uploadImageToS3(file);
-      user.profilePictureUrl = profilePictureUrl;
+    // console.log({file})
+    // if (file) {
+    //   const profilePictureUrl = await this.imageService.uploadImageToS3(file);
+    //   user.profilePictureUrl = profilePictureUrl;
+    // }
+    if (updateUserDto.password){
+      const hashedPassword = await this.hashPassword(updateUserDto.password);
+      updateUserDto.password = hashedPassword
     }
-    const hashedPassword = await this.hashPassword(updateUserDto.password);
-    updateUserDto.password = hashedPassword
-    Object.assign(user, updateUserDto);
+    const url = updateUserDto.profilePictureURL
+    if (url){
+      // console.log(url)
+      user.profilePictureUrl = url
+    }
+    // Object.assign(user, updateUserDto);
 
     return this.UserRepository.save(user);
   }
